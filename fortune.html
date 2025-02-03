@@ -4,16 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>命运之门 - AI 算命</title>
-  <!-- 内联CSS，实际项目中建议单独存放在 styles.css -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* 重置和基础样式 */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
     body {
-      font-family: '微软雅黑', sans-serif;
+      font-family: 'Noto Sans SC', sans-serif;
       background: linear-gradient(to bottom, #f8f8ff, #e0e0ff);
       color: #333;
       line-height: 1.6;
@@ -40,7 +39,6 @@
       max-width: 800px;
       margin: 0 auto;
     }
-    /* Hero区 */
     .hero {
       text-align: center;
       padding: 4em 2em;
@@ -54,10 +52,6 @@
       font-size: 3em;
       margin-bottom: 0.5em;
     }
-    .hero p {
-      font-size: 1.2em;
-      margin-bottom: 1em;
-    }
     .hero button {
       padding: 0.8em 2em;
       font-size: 1em;
@@ -70,7 +64,6 @@
     .hero button:hover {
       background-color: #e68900;
     }
-    /* 算命功能区 */
     .fortune-section {
       background-color: #fff;
       border-radius: 8px;
@@ -107,32 +100,35 @@
       background-color: #f1f1f1;
       border-radius: 4px;
     }
+    #loading {
+      display: none;
+      text-align: center;
+      font-size: 1.2em;
+      color: #4a90e2;
+      margin-top: 1em;
+    }
   </style>
 </head>
 <body>
-  <!-- 头部导航 -->
   <header>
     <h1>命运之门</h1>
     <nav>
       <ul>
-        <li><a href="#home">首页</a></li>
-        <li><a href="#fortune">算命</a></li>
-        <li><a href="#about">关于我们</a></li>
-        <li><a href="#contact">联系</a></li>
+        <li><a href="#home" aria-label="返回首页">首页</a></li>
+        <li><a href="#fortune" aria-label="跳转到算命页面">算命</a></li>
+        <li><a href="#about" aria-label="关于我们">关于我们</a></li>
+        <li><a href="#contact" aria-label="联系我们">联系</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- 主体内容 -->
   <main>
-    <!-- Hero展示区 -->
     <section class="hero" id="home">
       <h1>欢迎来到命运之门</h1>
       <p>体验由 AI 驱动的神秘算命服务，洞悉未来奥秘！</p>
       <button id="startFortune">开始算命</button>
     </section>
 
-    <!-- 算命交互区 -->
     <section class="fortune-section" id="fortune">
       <h2>请填写您的信息以获得预测</h2>
       <form id="fortuneForm">
@@ -144,87 +140,52 @@
           <label for="name">姓名:</label>
           <input type="text" id="name" name="name" placeholder="请输入姓名" required>
         </div>
-        <!-- 可根据需要添加更多输入项，如性别、出生地等 -->
         <button type="submit">获取预测</button>
       </form>
-      <!-- 算命结果展示区域 -->
+      <div id="loading">🔮 预测中...</div>
       <div id="fortuneResult"></div>
-    </section>
-
-    <!-- 关于我们 -->
-    <section id="about">
-      <h2>关于我们</h2>
-      <p>命运之门致力于利用最新的人工智能技术，为您提供个性化的命运解析与建议，让您更好地了解自己的未来方向。</p>
-    </section>
-
-    <!-- 联系方式 -->
-    <section id="contact">
-      <h2>联系我们</h2>
-      <p>如有疑问或建议，请通过邮箱 <a href="mailto:contact@example.com">contact@example.com</a> 与我们联系。</p>
     </section>
   </main>
 
-  <!-- 页脚信息 -->
   <footer>
     <p>© 2025 命运之门 AI 算命. 保留所有权利.</p>
   </footer>
 
-  <!-- JavaScript 部分 -->
   <script>
-    // 点击Hero区按钮滚动到算命区域
     document.getElementById('startFortune').addEventListener('click', function() {
       document.getElementById('fortune').scrollIntoView({ behavior: 'smooth' });
     });
 
-    // 处理表单提交，并调用 ChatGPT 3.5 API 进行预测
     document.getElementById('fortuneForm').addEventListener('submit', async function(event) {
-      event.preventDefault(); // 阻止默认表单提交
+      event.preventDefault();
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('fortuneResult').innerHTML = '';
 
-      // 收集用户输入信息
       const birthdate = document.getElementById('birthdate').value;
-      const name = document.getElementById('name').value;
+      const name = document.getElementById('name').value.trim();
 
-      // 构造发送给 ChatGPT 的提示（prompt），可根据需求调整内容
-      const prompt = `请为用户 ${name} 进行未来命运预测，他/她的出生日期为 ${birthdate}。请给出详细、个性化的算命结果。`;
+      if (!name.match(/^[\u4e00-\u9fa5a-zA-Z]+$/)) {
+        alert("姓名只能包含汉字或英文字母");
+        document.getElementById('loading').style.display = 'none';
+        return;
+      }
 
       try {
-        // 调用 OpenAI 的 ChatGPT 3.5 接口
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        const response = await fetch('/api/fortune', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            // 请将 YOUR_OPENAI_API_KEY 替换为实际的 API Key
-            'Authorization': 'Bearer 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'
-          },
-          body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [
-              { role: "user", content: prompt }
-            ],
-            temperature: 0.7,
-            max_tokens: 500
-          })
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, birthdate })
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          // 从返回结果中提取预测文本
-          const prediction = data.choices[0].message.content;
-          document.getElementById('fortuneResult').innerHTML = `
-            <h3>预测结果:</h3>
-            <p>${prediction}</p>
-          `;
-        } else {
-          document.getElementById('fortuneResult').innerHTML = `<p>抱歉，获取预测时出错，请稍后再试。</p>`;
-          console.error('API 返回错误状态:', response.status, response.statusText);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        document.getElementById('fortuneResult').innerHTML = `<h3>预测结果:</h3><p>${data.prediction}</p>`;
       } catch (error) {
-        document.getElementById('fortuneResult').innerHTML = `<p>网络错误，请检查您的连接。</p>`;
-        console.error('API 请求错误:', error);
+        document.getElementById('fortuneResult').innerHTML = `<p>无法获取预测，以下是随机预测：</p><p>你今天的运势极佳，贵人相助，事业顺利！</p>`;
+      } finally {
+        document.getElementById('loading').style.display = 'none';
       }
     });
-
-    // 可根据需求添加其他功能或扩展API调用
   </script>
 </body>
 </html>
