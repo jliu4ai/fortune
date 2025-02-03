@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI算命大师</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI算命大师</h1>
+        <div class="input-group">
+            <label for="name">姓名：</label>
+            <input type="text" id="name" required>
+        </div>
+        <div class="input-group">
+            <label for="birthdate">出生日期：</label>
+            <input type="date" id="birthdate" required>
+        </div>
+        <div class="input-group">
+            <label for="birthtime">出生时辰：</label>
+            <select id="birthtime">
+                <option value="子时">子时 (23:00-1:00)</option>
+                <option value="丑时">丑时 (1:00-3:00)</option>
+                <option value="寅时">寅时 (3:00-5:00)</option>
+                <option value="卯时">卯时 (5:00-7:00)</option>
+                <option value="辰时">辰时 (7:00-9:00)</option>
+                <option value="巳时">巳时 (9:00-11:00)</option>
+                <option value="午时">午时 (11:00-13:00)</option>
+                <option value="未时">未时 (13:00-15:00)</option>
+                <option value="申时">申时 (15:00-17:00)</option>
+                <option value="酉时">酉时 (17:00-19:00)</option>
+                <option value="戌时">戌时 (19:00-21:00)</option>
+                <option value="亥时">亥时 (21:00-23:00)</option>
+            </select>
+        </div>
+        <button onclick="getFortune()">开始算命</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        async function getFortune() {
+            const name = document.getElementById('name').value;
+            const birthdate = document.getElementById('birthdate').value;
+            const birthtime = document.getElementById('birthtime').value;
+            
+            if (!name || !birthdate) {
+                alert('请填写完整信息！');
+                return;
+            }
+
+            const API_KEY = '您的Deepseek API密钥'; // 替换为您的API密钥
+            const API_URL = 'https://api.deepseek.com/v1/chat/completions';  // Deepseek API地址
+
+            const prompt = `作为一位专业的算命大师，请为以下用户进行算命：
+姓名：${name}
+出生日期：${birthdate}
+出生时辰：${birthtime}
+请从以下方面为用户解析：
+1. 性格特点
+2. 事业发展
+3. 感情运势
+4. 财运分析
+5. 健康建议
+请用专业但通俗易懂的语言进行分析。`;
+
+            try {
+                document.getElementById('result').textContent = '正在推算命运，请稍候...';
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: "deepseek-chat",
+                        messages: [{
+                            role: "user",
+                            content: prompt
+                        }],
+                        temperature: 0.7
+                    })
+                });
+
+                const data = await response.json();
+                if (data.choices && data.choices[0]) {
+                    document.getElementById('result').textContent = data.choices[0].message.content;
+                } else {
+                    document.getElementById('result').textContent = '抱歉，算命失败，请稍后重试。';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('result').textContent = '发生错误，请稍后重试。';
+            }
+        }
+    </script>
+</body>
+</html>
