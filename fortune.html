@@ -171,7 +171,7 @@
       }
 
       try {
-        const response = await fetch('/api/fortune', {
+        const response = await fetch('http://146.50.28.27:5000/api/fortune', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, birthdate })
