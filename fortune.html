@@ -3,61 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI算命大师</title>
+    <title>AI智慧算命大师</title>
     <style>
         body {
             font-family: 'Microsoft YaHei', sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
         }
         .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
         .input-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
         }
         input, select {
             width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus {
+            border-color: #ff9a9e;
+            outline: none;
+            box-shadow: 0 0 5px rgba(255,154,158,0.3);
         }
         button {
-            background-color: #4CAF50;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
             color: white;
-            padding: 10px 20px;
             border: none;
-            border-radius: 4px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
+            transition: transform 0.2s ease;
         }
         button:hover {
-            background-color: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         #result {
-            margin-top: 20px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            white-space: pre-wrap;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            line-height: 1.6;
+            min-height: 100px;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+        }
+        .error {
+            color: #ff4444;
+            text-align: center;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>AI算命大师</h1>
+        <h1>🔮 AI智慧算命大师</h1>
         <div class="input-group">
             <label for="name">姓名：</label>
-            <input type="text" id="name" required>
+            <input type="text" id="name" placeholder="请输入您的姓名" required>
         </div>
         <div class="input-group">
             <label for="birthdate">出生日期：</label>
@@ -80,7 +112,7 @@
                 <option value="亥时">亥时 (21:00-23:00)</option>
             </select>
         </div>
-        <button onclick="getFortune()">开始算命</button>
+        <button onclick="getFortune()">开始解析命盘</button>
         <div id="result"></div>
     </div>
 
@@ -95,35 +127,37 @@
                 return;
             }
 
-            const API_KEY = '您的Deepseek API密钥'; // 替换为您的API密钥
-            const API_URL = 'https://api.deepseek.com/v1/chat/completions';  // Deepseek API地址
-
-            const prompt = `作为一位专业的算命大师，请为以下用户进行算命：
-姓名：${name}
-出生日期：${birthdate}
-出生时辰：${birthtime}
-请从以下方面为用户解析：
-1. 性格特点
-2. 事业发展
-3. 感情运势
-4. 财运分析
-5. 健康建议
-请用专业但通俗易懂的语言进行分析。`;
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="loading">正在推算命盘，请稍候...</div>';
 
             try {
-                document.getElementById('result').textContent = '正在推算命运，请稍候...';
-                
-                const response = await fetch(API_URL, {
+                // 这里使用 OpenAI API 作为示例，您也可以替换为其他AI服务提供商的API
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${API_KEY}`
+                        'Authorization': 'Bearer YOUR_API_KEY' // 替换为您的API密钥
                     },
                     body: JSON.stringify({
-                        model: "deepseek-chat",
+                        model: "gpt-3.5-turbo",
                         messages: [{
+                            role: "system",
+                            content: "你是一位专业的中国算命大师，精通八字、紫微斗数等传统命理学说。"
+                        }, {
                             role: "user",
-                            content: prompt
+                            content: `请为以下用户进行详细的命理分析：
+                            姓名：${name}
+                            出生日期：${birthdate}
+                            出生时辰：${birthtime}
+                            
+                            请从以下方面进行分析：
+                            1. 八字简析与性格特点
+                            2. 事业发展与机遇
+                            3. 感情姻缘分析
+                            4. 财运与福禄
+                            5. 健康建议
+                            
+                            请用专业但通俗易懂的语言进行分析，并给出具体的建议。`
                         }],
                         temperature: 0.7
                     })
@@ -131,13 +165,13 @@
 
                 const data = await response.json();
                 if (data.choices && data.choices[0]) {
-                    document.getElementById('result').textContent = data.choices[0].message.content;
+                    resultDiv.innerHTML = data.choices[0].message.content.replace(/\n/g, '<br>');
                 } else {
-                    document.getElementById('result').textContent = '抱歉，算命失败，请稍后重试。';
+                    resultDiv.innerHTML = '<div class="error">抱歉，解析失败，请稍后重试。</div>';
                 }
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('result').textContent = '发生错误，请稍后重试。';
+                resultDiv.innerHTML = '<div class="error">网络错误，请稍后重试。</div>';
             }
         }
     </script>
