@@ -1,0 +1,11 @@
+{
+  "name": "fortune-telling-app",
+  "version": "1.0.0",
+  "description": "年轻人的算命小工具",
+  "main": "main.js",
+  "dependencies": {
+    "@dcloudio/uni-app": "^2.0.0",
+    "@dcloudio/uni-ui": "^1.4.20",
+    "vuex": "^3.6.2"
+  }
+}

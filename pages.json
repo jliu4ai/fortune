@@ -1,0 +1,68 @@
+{
+  "pages": [
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "NEOASTRO",
+        "navigationBarBackgroundColor": "#1a1a2e",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/mbti/index",
+      "style": {
+        "navigationBarTitleText": "MBTI测试"
+      }
+    },
+    {
+      "path": "pages/fortune/index",
+      "style": {
+        "navigationBarTitleText": "命理分析"
+      }
+    },
+    {
+      "path": "pages/chat/index",
+      "style": {
+        "navigationBarTitleText": "智能问答"
+      }
+    },
+    {
+      "path": "pages/user/index",
+      "style": {
+        "navigationBarTitleText": "个人中心"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#1a1a2e",
+    "backgroundColor": "#1a1a2e"
+  }
+}
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#6B238E",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+  {
+    "pagePath": "pages/index/index",
+    "text": "首页",
+    "iconPath": "https://img.icons8.com/ios/50/home--v1.png",
+    "selectedIconPath": "https://img.icons8.com/ios-filled/50/home.png"
+  },
+      {
+        "pagePath": "pages/fortune/index",
+        "text": "算命",
+        "iconPath": "static/images/fortune.png",
+        "selectedIconPath": "static/images/fortune-active.png"
+      },
+      {
+        "pagePath": "pages/user/index",
+        "text": "我的",
+        "iconPath": "static/images/user.png",
+        "selectedIconPath": "static/images/user-active.png"
+      }
+    ]
+  }
+}
