@@ -27,10 +27,11 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 /* 全局样式 */
 page {
-  background-color: #f8f8f8;
+  background-color: #1a1a2e;
+  color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
     Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei',
     sans-serif;

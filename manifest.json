@@ -8,15 +8,24 @@
     "h5" : {
         "title" : "NEOASTRO",
         "router" : {
-            "mode" : "hash",
+            "mode" : "history",
             "base" : "/fortune/"
+        },
+        "optimization": {
+            "treeShaking": {
+                "enable": true
+            }
         }
     },
     "mp-weixin" : {
         "appid" : "",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "es6": true,
+            "postcss": true,
+            "minified": true
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+        "permission": {}
     }
 } 
