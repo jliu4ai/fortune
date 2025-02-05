@@ -37,20 +37,19 @@
     "navigationBarTextStyle": "white",
     "navigationBarBackgroundColor": "#1a1a2e",
     "backgroundColor": "#1a1a2e"
-  }
-}
+  },
   "tabBar": {
     "color": "#7A7E83",
     "selectedColor": "#6B238E",
     "borderStyle": "black",
     "backgroundColor": "#ffffff",
     "list": [
-  {
-    "pagePath": "pages/index/index",
-    "text": "首页",
-    "iconPath": "https://img.icons8.com/ios/50/home--v1.png",
-    "selectedIconPath": "https://img.icons8.com/ios-filled/50/home.png"
-  },
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/images/home.png",
+        "selectedIconPath": "static/images/home-active.png"
+      },
       {
         "pagePath": "pages/fortune/index",
         "text": "算命",
